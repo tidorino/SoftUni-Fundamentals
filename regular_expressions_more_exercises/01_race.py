@@ -1,42 +1,35 @@
+import re
+
+
 def race():
     name = input().split(', ')
-    name_list = []
-    digit_list = []
     race_participants = {}
-    names = ''
-    km_run = 0
+
     while True:
         command = input()
         if command == 'end of race':
             break
 
-        for char in command:
-            if char.isalpha():
-                name_list.append(char)
-            if char.isdigit():
-                digit_list.append(int(char))
+        pattern = r"([A-Za-z])"
+        result = re.findall(pattern, command)
+        result_name = "".join(result)
 
-        names = "".join(name_list)
-        km_run = sum(digit_list)
-        if names in name:
+        dijit_pattern = r"([0-9])"
+        new_result = re.findall(dijit_pattern, command)
+        new_result = "".join(new_result)
+        result_dijit = sum(list(map(int, new_result)))
 
-            if names in race_participants:
-                race_participants[names] += km_run
-            else:
-                race_participants[names] = km_run
-            name_list = []
-            digit_list = []
+        if result_name not in race_participants and result_name in name:
+            race_participants[result_name] = result_dijit
+        elif result_name in race_participants:
+            race_participants[result_name] += result_dijit
 
-    new_dic = {}
-    # for n in name:
-    #     if n not in race_participants:
-    #         race_participants.pop('n')
-    # for x in race_participants:
-    #     if x in name:
-    #         new_dic = race_participants.get(x)
+    race_participants = sorted(race_participants.items(), key=lambda item: -item[1])
+    new_race_part = race_participants[:3]
 
-
-    print(race_participants)
+    print(f"1st place: {new_race_part[0][0]}")
+    print(f"2nd place: {new_race_part[1][0]}")
+    print(f"3rd place: {new_race_part[2][0]}")
 
 
 race()
